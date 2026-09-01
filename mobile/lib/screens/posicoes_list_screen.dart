@@ -6,6 +6,7 @@ import '../state/auth_provider.dart';
 import '../state/posicoes_provider.dart';
 import 'posicao_detail_screen.dart';
 import 'posicao_form_screen.dart';
+import 'resumo_screen.dart';
 
 class PosicoesListScreen extends ConsumerWidget {
   const PosicoesListScreen({super.key});
@@ -19,6 +20,15 @@ class PosicoesListScreen extends ConsumerWidget {
       appBar: AppBar(
         title: const Text('Minha carteira'),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.pie_chart_outline),
+            tooltip: 'Resumo',
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const ResumoScreen()),
+              );
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.logout),
             tooltip: 'Sair',
