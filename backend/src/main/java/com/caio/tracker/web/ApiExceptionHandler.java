@@ -1,8 +1,10 @@
 package com.caio.tracker.web;
 
 import com.caio.tracker.posicao.PosicaoNotFoundException;
+import com.caio.tracker.usuario.EmailJaCadastradoException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -17,6 +19,17 @@ public class ApiExceptionHandler {
     @ExceptionHandler(PosicaoNotFoundException.class)
     public ResponseEntity<Map<String, Object>> handleNotFound(PosicaoNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(corpoErro(HttpStatus.NOT_FOUND, ex.getMessage()));
+    }
+
+    @ExceptionHandler(EmailJaCadastradoException.class)
+    public ResponseEntity<Map<String, Object>> handleEmailDuplicado(EmailJaCadastradoException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(corpoErro(HttpStatus.CONFLICT, ex.getMessage()));
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<Map<String, Object>> handleCredenciaisInvalidas(BadCredentialsException ex) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(corpoErro(HttpStatus.UNAUTHORIZED, "Email ou senha inválidos"));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

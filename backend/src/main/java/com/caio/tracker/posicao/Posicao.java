@@ -1,9 +1,12 @@
 package com.caio.tracker.posicao;
 
+import com.caio.tracker.usuario.Usuario;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -20,18 +23,27 @@ public class Posicao {
     private BigDecimal precoCompra;
     private LocalDate dataCompra;
 
+    @ManyToOne
+    @JoinColumn(name = "usuario_id", nullable = false)
+    private Usuario usuario;
+
     protected Posicao() {
     }
 
-    public Posicao(String ativo, BigDecimal quantidade, BigDecimal precoCompra, LocalDate dataCompra) {
+    public Posicao(String ativo, BigDecimal quantidade, BigDecimal precoCompra, LocalDate dataCompra, Usuario usuario) {
         this.ativo = ativo;
         this.quantidade = quantidade;
         this.precoCompra = precoCompra;
         this.dataCompra = dataCompra;
+        this.usuario = usuario;
     }
 
     public Long getId() {
         return id;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
     }
 
     public String getAtivo() {
