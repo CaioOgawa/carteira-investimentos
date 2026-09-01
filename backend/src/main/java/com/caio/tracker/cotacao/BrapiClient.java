@@ -1,5 +1,6 @@
 package com.caio.tracker.cotacao;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
@@ -14,8 +15,14 @@ public class BrapiClient {
 
     private final RestClient restClient;
 
+    @Autowired
     public BrapiClient(@Value("${cotacoes.brapi.base-url}") String baseUrl) {
-        this.restClient = RestClient.builder().baseUrl(baseUrl).build();
+        this(RestClient.builder().baseUrl(baseUrl).build());
+    }
+
+    /** Visível ao pacote para permitir injetar um RestClient de teste (ex: com MockRestServiceServer). */
+    BrapiClient(RestClient restClient) {
+        this.restClient = restClient;
     }
 
     public Map<String, BigDecimal> buscarCotacoes(List<String> ativos) {
@@ -25,7 +32,7 @@ public class BrapiClient {
 
         String tickers = String.join(",", ativos);
         BrapiResponse resposta = restClient.get()
-                .uri("/quote/{tickers}", tickers)
+                .uri("/quote/" + tickers)
                 .retrieve()
                 .body(BrapiResponse.class);
 
