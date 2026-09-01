@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
+import '../state/auth_provider.dart';
 import '../state/posicoes_provider.dart';
 import 'posicao_detail_screen.dart';
 import 'posicao_form_screen.dart';
@@ -15,7 +16,16 @@ class PosicoesListScreen extends ConsumerWidget {
     final moeda = NumberFormat.simpleCurrency(locale: 'pt_BR');
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Minha carteira')),
+      appBar: AppBar(
+        title: const Text('Minha carteira'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            tooltip: 'Sair',
+            onPressed: () => ref.read(authControllerProvider).logout(),
+          ),
+        ],
+      ),
       body: posicoesAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (erro, _) => Center(

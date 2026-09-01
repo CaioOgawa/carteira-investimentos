@@ -2,8 +2,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/posicao.dart';
 import '../services/posicao_api.dart';
+import 'auth_provider.dart';
 
-final posicaoApiProvider = Provider<PosicaoApi>((ref) => PosicaoApi());
+final posicaoApiProvider = Provider<PosicaoApi>((ref) => PosicaoApi(ref.watch(dioProvider)));
 
 class PosicoesNotifier extends AsyncNotifier<List<Posicao>> {
   @override
