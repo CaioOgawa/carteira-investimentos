@@ -1,5 +1,6 @@
 package com.caio.tracker.web;
 
+import com.caio.tracker.posicao.ArquivoImportacaoInvalidoException;
 import com.caio.tracker.posicao.PosicaoNotFoundException;
 import com.caio.tracker.usuario.EmailJaCadastradoException;
 import org.springframework.http.HttpStatus;
@@ -30,6 +31,11 @@ public class ApiExceptionHandler {
     public ResponseEntity<Map<String, Object>> handleCredenciaisInvalidas(BadCredentialsException ex) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(corpoErro(HttpStatus.UNAUTHORIZED, "Email ou senha inválidos"));
+    }
+
+    @ExceptionHandler(ArquivoImportacaoInvalidoException.class)
+    public ResponseEntity<Map<String, Object>> handleArquivoInvalido(ArquivoImportacaoInvalidoException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(corpoErro(HttpStatus.BAD_REQUEST, ex.getMessage()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

@@ -43,6 +43,9 @@ class PosicaoControllerTest {
     @MockitoBean
     private PosicaoService posicaoService;
 
+    @MockitoBean
+    private PosicaoImportService posicaoImportService;
+
     // Necessários apenas para satisfazer a construção do JwtAuthenticationFilter
     // (bean do tipo Filter, incluído no slice do @WebMvcTest mesmo com addFilters=false)
     @MockitoBean
@@ -112,5 +115,23 @@ class PosicaoControllerTest {
     void remover_devolve204SemConteudo() throws Exception {
         mockMvc.perform(delete("/posicoes/1"))
                 .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void importar_comCsvValido_devolveImportadasEErros() throws Exception {
+        var resposta = new ImportacaoResponse(
+                List.of(PosicaoResponse.from(posicaoPetr4())),
+                List.of(new ErroImportacao(3, "quantidade deve ser maior que zero"))
+        );
+        when(posicaoImportService.importar(any(), eq(USUARIO_ID))).thenReturn(resposta);
+
+        var arquivo = new org.springframework.mock.web.MockMultipartFile(
+                "arquivo", "carteira.csv", "text/csv",
+                "ativo,quantidade,precoCompra,dataCompra\nPETR4,10,32.50,2026-01-15\n".getBytes());
+
+        mockMvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart("/posicoes/importar").file(arquivo))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.importadas[0].ativo").value("PETR4"))
+                .andExpect(jsonPath("$.erros[0].linha").value(3));
     }
 }
