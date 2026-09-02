@@ -1,0 +1,265 @@
+:root {
+  --text: #2b2b33;
+  --text-muted: #6b6375;
+  --bg: #fafafa;
+  --card-bg: #fff;
+  --border: #e5e4e7;
+  --accent: #3f51b5;
+  --positivo: #2e7d32;
+  --negativo: #c62828;
+
+  font: 15px/1.5 system-ui, 'Segoe UI', Roboto, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+h1 {
+  font-size: 22px;
+  margin: 0;
+}
+
+h2 {
+  font-size: 16px;
+  margin: 24px 0 8px;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 16px;
+  background: var(--accent);
+  color: #fff;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+button.secundario {
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+
+button.link-botao {
+  background: none;
+  color: var(--accent);
+  padding: 0;
+  text-decoration: underline;
+}
+
+a {
+  color: var(--accent);
+}
+
+.erro {
+  color: var(--negativo);
+  font-size: 14px;
+}
+
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 360px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.auth-card h1 {
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.auth-card label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.auth-card input {
+  font: inherit;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.link-secundario {
+  text-align: center;
+  font-size: 14px;
+}
+
+.pagina {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.topo-acoes {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 14px;
+}
+
+.usuario {
+  color: var(--text-muted);
+}
+
+.aviso {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.tabela-posicoes {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.tabela-posicoes th,
+.tabela-posicoes td {
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+}
+
+.tabela-posicoes th {
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.botao-adicionar {
+  margin-top: 16px;
+}
+
+.posicao-form {
+  margin-top: 16px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.posicao-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.posicao-form input {
+  font: inherit;
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+.posicao-form-acoes {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.card-resumo {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.linha-resumo {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  font-size: 14px;
+}
+
+.linha-resumo span {
+  color: var(--text-muted);
+}
+
+.positivo {
+  color: var(--positivo);
+}
+
+.negativo {
+  color: var(--negativo);
+}
+
+.grafico-composicao {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.legenda {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.legenda li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.legenda .percentual {
+  margin-left: auto;
+  color: var(--text-muted);
+}
+
+.marcador {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}

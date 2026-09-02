@@ -9,6 +9,9 @@ final posicaoApiProvider = Provider<PosicaoApi>((ref) => PosicaoApi(ref.watch(di
 class PosicoesNotifier extends AsyncNotifier<List<Posicao>> {
   @override
   Future<List<Posicao>> build() {
+    // Refaz a busca sempre que o token mudar (login/logout/troca de conta) -
+    // sem isso a lista fica presa nos dados da sessão anterior.
+    ref.watch(authTokenProvider);
     return ref.read(posicaoApiProvider).listar();
   }
 

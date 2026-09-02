@@ -1,12 +1,13 @@
 # Carteira de Investimentos
 
 Tracks a stock portfolio: an API that holds positions and pulls quotes from
-brapi.dev, plus a Flutter app on top of it.
+brapi.dev, plus a Flutter app and a React dashboard on top of it.
 
 ## Layout
 
 - `backend/` - Spring Boot 4 API (Java 17, Postgres, JWT auth, scheduled quote updates)
 - `mobile/` - Flutter app (iOS/Android/macOS)
+- `web/` - React + Vite dashboard (same features as the mobile app, browser-only)
 
 ## Running the backend
 
@@ -35,6 +36,19 @@ flutter run
 It points at `http://localhost:8080` (see `lib/api_config.dart`), which works
 against the iOS simulator and the macOS build without changes since both share
 the Mac's network. A physical device needs the machine's LAN IP instead.
+
+## Running the web dashboard
+
+```
+cd web
+npm install
+npm run dev
+```
+
+Opens on `http://localhost:5173`, also pointed at `http://localhost:8080` by
+default (override with `VITE_API_BASE_URL`). The backend's CORS config only
+allows that origin, so a different dev port needs a matching change in
+`SecurityConfig.corsConfigurationSource`.
 
 ## CSV import format
 
