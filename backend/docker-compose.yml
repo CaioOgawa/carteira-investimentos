@@ -27,6 +27,8 @@ services:
       SPRING_DATASOURCE_PASSWORD: tracker
       # Troque por um segredo forte em produção real (32+ bytes)
       JWT_SECRET: troque-este-segredo-em-producao-precisa-ter-32-bytes-no-minimo
+      # Token gratuito em https://brapi.dev/dashboard - lido da variável de ambiente do host
+      BRAPI_TOKEN: ${BRAPI_TOKEN:-}
     ports:
       - "8080:8080"
 

@@ -16,24 +16,42 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 class BrapiClientTest {
 
     @Test
-    void buscarCotacoes_comMultiplosAtivos_naoCodificaAVirgulaNaUrl() {
+    void buscarCotacoes_comMultiplosAtivos_fazUmaRequisicaoPorTicker() {
+        // Plano gratuito da brapi.dev permite só 1 ativo por requisição.
         RestClient.Builder builder = RestClient.builder().baseUrl("https://brapi.dev/api");
         MockRestServiceServer servidor = MockRestServiceServer.bindTo(builder).build();
 
-        // A URL precisa chegar com a vírgula literal (PETR4,VALE3), não %2C -
-        // a brapi.dev responde 401 genérico para uma URL malformada dessa forma.
-        servidor.expect(requestTo("https://brapi.dev/api/quote/PETR4,VALE3"))
+        servidor.expect(requestTo("https://brapi.dev/api/quote/PETR4"))
                 .andRespond(withSuccess("""
-                        {"results":[
-                            {"symbol":"PETR4","regularMarketPrice":46.87},
-                            {"symbol":"VALE3","regularMarketPrice":78.30}
-                        ]}""", MediaType.APPLICATION_JSON));
+                        {"results":[{"symbol":"PETR4","regularMarketPrice":46.87}]}""", MediaType.APPLICATION_JSON));
+        servidor.expect(requestTo("https://brapi.dev/api/quote/VALE3"))
+                .andRespond(withSuccess("""
+                        {"results":[{"symbol":"VALE3","regularMarketPrice":78.30}]}""", MediaType.APPLICATION_JSON));
 
-        BrapiClient client = new BrapiClient(builder.build());
+        BrapiClient client = new BrapiClient(builder.build(), "");
         Map<String, BigDecimal> cotacoes = client.buscarCotacoes(List.of("PETR4", "VALE3"));
 
         assertThat(cotacoes).containsEntry("PETR4", new BigDecimal("46.87"));
         assertThat(cotacoes).containsEntry("VALE3", new BigDecimal("78.30"));
+        servidor.verify();
+    }
+
+    @Test
+    void buscarCotacoes_quandoUmTickerFalha_mantemOsDemais() {
+        RestClient.Builder builder = RestClient.builder().baseUrl("https://brapi.dev/api");
+        MockRestServiceServer servidor = MockRestServiceServer.bindTo(builder).build();
+
+        servidor.expect(requestTo("https://brapi.dev/api/quote/PETR4"))
+                .andRespond(withSuccess("""
+                        {"results":[{"symbol":"PETR4","regularMarketPrice":46.87}]}""", MediaType.APPLICATION_JSON));
+        servidor.expect(requestTo("https://brapi.dev/api/quote/TICKERINVALIDO"))
+                .andRespond(org.springframework.test.web.client.response.MockRestResponseCreators.withBadRequest());
+
+        BrapiClient client = new BrapiClient(builder.build(), "");
+        Map<String, BigDecimal> cotacoes = client.buscarCotacoes(List.of("PETR4", "TICKERINVALIDO"));
+
+        assertThat(cotacoes).containsEntry("PETR4", new BigDecimal("46.87"));
+        assertThat(cotacoes).doesNotContainKey("TICKERINVALIDO");
         servidor.verify();
     }
 }
